@@ -1,0 +1,35 @@
+db:
+    logs_storage:
+        host: "localhost"
+        port: "5432"
+        dbname: "logs_storage"
+        user: "igortryhan"
+        password: "1111"
+        driver: "postgres"
+
+broker:
+    username: ""
+    password: ""
+
+    URLs:
+        - "192.168.20.9:19092"
+
+    consumer:
+        logs:
+            topic: "store"
+            group_id: "logs_storage"
+
+## logger
+logger:
+    level: DEBUG
+    to_file: true
+    to_stderr: true
+    fn: "logsStorage.log"
+    max_size_mb: 100
+    max_files: 10
+
+
+
+
+    
+

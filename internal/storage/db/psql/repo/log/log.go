@@ -41,5 +41,38 @@ func (r repo) WithTransaction(ctx context.Context) (log.Log, transaction.Service
 }
 
 func (r repo) Add(ctx context.Context, logs ...logmodel.Log) error {
+	ctx, cancel := context.WithTimeout(ctx, requestTimeout)
+	defer cancel()
+
+	tx, err := r.db.BeginTxx(ctx, nil)
+	if err != nil && !errors.Is(err, sqlt.ErrTxAlreadyStarted) {
+		return err
+	}
+
+	// if error is not ErrTxAlreadyStarted
+	if err == nil {
+		defer tx.Commit()
+	}
+
+	logsQuery := `INSERT INTO logs 
+        				(trace_id, time, module, level, message)
+      		  	  VALUES ($1, $2, $3, $4, $5)`
+
+	for _, log := range logs {
+		err = r.db.QueryRowContext(ctx, logsQuery,
+			log.TraceID,
+			log.Time,
+			log.Module,
+			log.Level,
+			log.Message,
+		).Scan()
+
+		if err != nil {
+			tx.Rollback()
+
+			return err
+		}
+	}
+
 	return nil
 }

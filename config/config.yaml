@@ -12,7 +12,7 @@ broker:
     password: ""
 
     URLs:
-        - "192.168.20.9:19092"
+        - "localhost:19092"
 
     consumer:
         logs:

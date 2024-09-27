@@ -22,5 +22,5 @@ func New(storage storage.Storage) Service {
 }
 
 func (s service) Add(ctx context.Context, logs ...log.Log) error {
-	return nil
+	return s.storage.Log().Add(ctx, logs...)
 }

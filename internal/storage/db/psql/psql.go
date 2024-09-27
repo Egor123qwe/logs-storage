@@ -4,7 +4,9 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 
+	logrepo "github.com/Egor123qwe/logs-storage/internal/storage/db/psql/repo/log"
 	"github.com/Egor123qwe/logs-storage/internal/storage/repo/log"
+	"github.com/Egor123qwe/logs-storage/pkg/sqlt"
 )
 
 type Store interface {
@@ -25,7 +27,8 @@ func New(config Config) (Store, error) {
 	}
 
 	storage := store{
-		db: db,
+		db:  db,
+		log: logrepo.New(sqlt.NewDB(db)),
 	}
 
 	return storage, nil

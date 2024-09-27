@@ -1,6 +1,6 @@
 MIGRATION_DIR = "./migration"
 DB_DRIVER = "postgres"
-DB_STRING = "postgres://igortryhan:postgres@localhost:5432/logsstorage?sslmode=disable"
+DB_STRING = "postgres://igortryhan:postgres@localhost:5432/logs_storage?sslmode=disable"
 
 .PHONY: run docker-build docker-run migrate-create migrate-up migrate-down
 

@@ -18,7 +18,17 @@ func (h handler) AddLogs(ctx context.Context, m []byte) error {
 	srvReq := make([]logmodel.Log, len(reqMSG.Content))
 
 	for i, log := range reqMSG.Content {
+		level := logmodel.ConvertLevelName(log.Level)
+
+		if level == logmodel.Invalid {
+			return fmt.Errorf("%w: %s", model.ErrInvalidLogLevel, log.Level)
+		}
+
 		srvReq[i] = logmodel.Log{
+			TraceID: log.TraceID,
+			Time:    log.Time,
+			Module:  log.Module,
+			Level:   level,
 			Message: log.Message,
 		}
 	}

@@ -4,7 +4,7 @@ DB_STRING = "postgres://igortryhan:postgres@localhost:5432/logs_storage?sslmode=
 
 # proto compile config
 proto_dir         = internal/handler/grpc/proto
-proto_build_dir   = internal/handler/grpc/generate
+proto_build_dir   = pkg/proto
 
 .PHONY: run docker-build docker-run migrate-create migrate-up migrate-down
 

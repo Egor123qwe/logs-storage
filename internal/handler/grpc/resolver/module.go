@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	model "github.com/Egor123qwe/logs-storage/internal/handler/grpc/generate"
 	srvmodel "github.com/Egor123qwe/logs-storage/internal/model"
+	model "github.com/Egor123qwe/logs-storage/pkg/proto"
 )
 
 func (h Handler) GetModules(ctx context.Context, req *model.ModuleReq) (*model.ModuleResp, error) {

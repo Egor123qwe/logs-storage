@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	model "github.com/Egor123qwe/logs-storage/internal/handler/grpc/generate"
 	srvmodel "github.com/Egor123qwe/logs-storage/internal/model"
 	"github.com/Egor123qwe/logs-storage/internal/util"
+	model "github.com/Egor123qwe/logs-storage/pkg/proto"
 )
 
 func (h Handler) GetLogs(ctx context.Context, req *model.LogFilter) (*model.LogResp, error) {

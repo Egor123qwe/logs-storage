@@ -3,8 +3,8 @@ package resolver
 import (
 	"github.com/op/go-logging"
 
-	model "github.com/Egor123qwe/logs-storage/internal/handler/grpc/generate"
 	srv "github.com/Egor123qwe/logs-storage/internal/service"
+	model "github.com/Egor123qwe/logs-storage/pkg/proto"
 )
 
 var log = logging.MustGetLogger("worker handler")

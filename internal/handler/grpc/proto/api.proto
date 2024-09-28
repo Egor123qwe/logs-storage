@@ -20,8 +20,8 @@ message Log {
     string traceID  = 2;
     string module   = 3;
 
-    string time     = 4;
-    string level    = 5;
+    google.protobuf.Timestamp time  = 4;
+    string                    level = 5;
 
     string message  = 6;
 }

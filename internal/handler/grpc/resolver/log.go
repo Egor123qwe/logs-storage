@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	srvmodel "github.com/Egor123qwe/logs-storage/internal/model"
 	"github.com/Egor123qwe/logs-storage/internal/util"
 	model "github.com/Egor123qwe/logs-storage/pkg/proto"
@@ -47,12 +49,14 @@ func (h Handler) GetLogs(ctx context.Context, req *model.LogFilter) (*model.LogR
 	}
 
 	for _, log := range resp.Logs {
+		time := timestamppb.New(log.Time)
+
 		result.Logs = append(result.Logs, &model.Log{
 			Id:      log.ID,
 			TraceID: log.TraceID,
 			Module:  log.Module,
 
-			Time:  log.Time.String(),
+			Time:  time,
 			Level: log.Level,
 
 			Message: log.Message,

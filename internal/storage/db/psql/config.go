@@ -6,19 +6,19 @@ import (
 	"github.com/spf13/viper"
 )
 
-type DB struct {
+type dbConfig struct {
 	URL    string
 	Driver string
 }
 
 type Config struct {
-	logStorage DB
+	db dbConfig
 }
 
 func NewConfig() Config {
 	config := Config{
-		logStorage: DB{
-			URL:    parseDbURL("db.logs_storage"),
+		db: dbConfig{
+			URL:    newDBParams("db.logs_storage").ParseURL(),
 			Driver: viper.GetString("db.logs_storage.driver"),
 		},
 	}
@@ -26,14 +26,30 @@ func NewConfig() Config {
 	return config
 }
 
-func parseDbURL(dbConfigName string) string {
-	host := viper.GetString(fmt.Sprintf("%s.host", dbConfigName))
-	port := viper.GetString(fmt.Sprintf("%s.port", dbConfigName))
-	dbname := viper.GetString(fmt.Sprintf("%s.dbname", dbConfigName))
-	user := viper.GetString(fmt.Sprintf("%s.user", dbConfigName))
-	password := viper.GetString(fmt.Sprintf("%s.password", dbConfigName))
+type dbParams struct {
+	configPath string
 
-	urlTemplate := "host=%s port=%s dbname=%s user=%s password=%s  sslmode=disable"
+	host     string
+	port     string
+	dbname   string
+	user     string
+	password string
+}
 
-	return fmt.Sprintf(urlTemplate, host, port, dbname, user, password)
+func newDBParams(configPath string) dbParams {
+	return dbParams{
+		configPath: configPath,
+
+		host:     viper.GetString(fmt.Sprintf("%s.host", configPath)),
+		port:     viper.GetString(fmt.Sprintf("%s.port", configPath)),
+		dbname:   viper.GetString(fmt.Sprintf("%s.dbname", configPath)),
+		user:     viper.GetString(fmt.Sprintf("%s.user", configPath)),
+		password: viper.GetString(fmt.Sprintf("%s.password", configPath)),
+	}
+}
+
+func (db dbParams) ParseURL() string {
+	template := viper.GetString(fmt.Sprintf("%s.urlTemplate", db.configPath))
+
+	return fmt.Sprintf(template, db.host, db.port, db.dbname, db.user, db.password)
 }

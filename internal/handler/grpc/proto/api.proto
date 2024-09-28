@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package api;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "./";
+
+service Logs {
+    rpc GetLogs(LogFilter) returns (LogResp) {};
+
+    rpc GetModules(ModuleReq) returns (ModuleResp) {};
+    rpc InitModule(InitModuleReq) returns (InitModuleResp) {};
+
+    rpc GetAllowedLevels(LevelsReq) returns (LevelsResp) {};
+}
+
+message Log {
+    int64  id       = 1;
+    string traceID  = 2;
+    string module   = 3;
+
+    string time     = 4;
+    string level    = 5;
+
+    string message  = 6;
+}
+
+message LogFilter {
+    optional string traceID  = 1;
+    optional int64  moduleID = 2;
+
+    optional string level    = 3;
+
+    optional google.protobuf.Timestamp startTime = 4;
+    optional google.protobuf.Timestamp endTime   = 5;
+
+    string message = 6;
+
+    int64 countOnPage = 7;
+    int64 page        = 8;
+}
+
+message LogResp {
+    repeated Log logs = 1;
+
+    int64 pagesCount = 2;
+}
+
+message ModuleReq {
+    string nameFilter = 1;
+}
+message ModuleResp {
+    repeated string modules = 1;
+}
+
+message InitModuleReq {
+    string module = 1;
+}
+message InitModuleResp {
+    int64 moduleId = 1;
+}
+
+message LevelsReq {}
+message LevelsResp {
+    repeated string levels = 1;
+}

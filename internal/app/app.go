@@ -23,7 +23,7 @@ func New() (*App, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	
 	app := &App{
 		srv: service.New(storage),
 	}

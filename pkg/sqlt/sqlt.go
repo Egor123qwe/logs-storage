@@ -6,6 +6,7 @@ import (
 	"errors"
 
 	"github.com/jmoiron/sqlx"
+
 	"github.com/Egor123qwe/logs-storage/pkg/sqlt/transaction"
 	"github.com/Egor123qwe/logs-storage/pkg/sqlt/transactor"
 )
@@ -49,6 +50,18 @@ func (d *DB) Rollback() error {
 	return ErrNotTx
 }
 
+func (d *DB) QueryRow(query string, args ...any) *sql.Row {
+	switch {
+	case d.tx != nil:
+		return d.tx.QueryRow(query, args...)
+
+	case d.db != nil:
+		return d.db.QueryRow(query, args...)
+	}
+
+	panic(ErrNilDBAndTx)
+}
+
 func (d *DB) QueryRowContext(ctx context.Context, query string, args ...any) *sql.Row {
 	switch {
 	case d.tx != nil:
@@ -59,6 +72,18 @@ func (d *DB) QueryRowContext(ctx context.Context, query string, args ...any) *sq
 	}
 
 	panic(ErrNilDBAndTx)
+}
+
+func (d *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
+	switch {
+	case d.tx != nil:
+		return d.tx.Query(query, args...)
+
+	case d.db != nil:
+		return d.db.Query(query, args...)
+	}
+
+	return nil, ErrNilDBAndTx
 }
 
 func (d *DB) QueryContext(ctx context.Context, query string, args ...any) (*sql.Rows, error) {
@@ -80,18 +105,6 @@ func (d *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
 
 	case d.db != nil:
 		return d.db.Exec(query, args...)
-	}
-
-	return nil, ErrNilDBAndTx
-}
-
-func (d *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
-	switch {
-	case d.tx != nil:
-		return d.tx.Query(query, args...)
-
-	case d.db != nil:
-		return d.db.Query(query, args...)
 	}
 
 	return nil, ErrNilDBAndTx

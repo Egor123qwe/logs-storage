@@ -2,6 +2,10 @@ MIGRATION_DIR = "./migration"
 DB_DRIVER = "postgres"
 DB_STRING = "postgres://igortryhan:postgres@localhost:5432/logs_storage?sslmode=disable"
 
+# proto compile config
+proto_dir         = internal/handler/grpc/proto
+proto_build_dir   = internal/handler/grpc/generate
+
 .PHONY: run docker-build docker-run migrate-create migrate-up migrate-down
 
 run:
@@ -22,3 +26,10 @@ migrate-up:
 
 migrate-down:
 	goose -dir ${MIGRATION_DIR} ${DB_DRIVER} ${DB_STRING} down
+
+compile-proto:
+	protoc -I$(proto_dir) \
+	--proto_path=$(proto_dir) \
+	--go_out=$(proto_build_dir) \
+	--go-grpc_out=$(proto_build_dir) \
+	$(proto_dir)/*.proto

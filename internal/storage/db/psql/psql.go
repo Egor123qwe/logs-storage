@@ -5,23 +5,23 @@ import (
 	_ "github.com/lib/pq"
 
 	logrepo "github.com/Egor123qwe/logs-storage/internal/storage/db/psql/repo/log"
-	"github.com/Egor123qwe/logs-storage/internal/storage/repo/log"
+	"github.com/Egor123qwe/logs-storage/internal/storage/repo"
 	"github.com/Egor123qwe/logs-storage/pkg/sqlt"
 )
 
-type Store interface {
-	Log() log.Log
+type Storage interface {
+	Log() repo.Log
 
 	Close() error
 }
 
 type store struct {
 	db  *sqlx.DB
-	log log.Log
+	log repo.Log
 }
 
-func New(config Config) (Store, error) {
-	db, err := sqlx.Connect(config.logStorage.Driver, config.logStorage.URL)
+func New(config Config) (Storage, error) {
+	db, err := sqlx.Connect(config.db.Driver, config.db.URL)
 	if err != nil {
 		return nil, err
 	}
@@ -34,10 +34,10 @@ func New(config Config) (Store, error) {
 	return storage, nil
 }
 
-func (s store) Close() error {
-	return s.db.Close()
+func (s store) Log() repo.Log {
+	return s.log
 }
 
-func (s store) Log() log.Log {
-	return s.log
+func (s store) Close() error {
+	return s.db.Close()
 }

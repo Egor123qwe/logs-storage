@@ -2,17 +2,17 @@ package storage
 
 import (
 	"github.com/Egor123qwe/logs-storage/internal/storage/db/psql"
-	"github.com/Egor123qwe/logs-storage/internal/storage/repo/log"
+	"github.com/Egor123qwe/logs-storage/internal/storage/repo"
 )
 
 type Storage interface {
-	Log() log.Log
+	Log() repo.Log
 
 	Close() error
 }
 
 type storage struct {
-	psql psql.Store
+	psql psql.Storage
 }
 
 func New() (Storage, error) {

@@ -1,9 +1,6 @@
-package log
+package model
 
-import (
-	"strings"
-	"time"
-)
+import "strings"
 
 type Level int
 
@@ -18,7 +15,7 @@ const (
 	Invalid = -1
 )
 
-var levelNames = []string{
+var LevelNames = []string{
 	"CRITICAL",
 	"ERROR",
 	"WARNING",
@@ -27,27 +24,16 @@ var levelNames = []string{
 	"DEBUG",
 }
 
-type Log struct {
-	ID      uint64
-	TraceID string
-
-	Time   time.Time
-	Module string
-	Level  Level
-
-	Message string
+func (l Level) String() string {
+	return LevelNames[l]
 }
 
 func ConvertLevelName(name string) Level {
-	for i, levelName := range levelNames {
+	for i, levelName := range LevelNames {
 		if strings.EqualFold(levelName, name) {
 			return Level(i)
 		}
 	}
 
 	return Invalid
-}
-
-func (l Level) String() string {
-	return levelNames[l]
 }

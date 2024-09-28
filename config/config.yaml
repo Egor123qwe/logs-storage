@@ -1,3 +1,6 @@
+grpc:
+    port: 8081
+
 db:
     logs_storage:
         host: "localhost"
@@ -5,6 +8,8 @@ db:
         dbname: "logs_storage"
         user: "igortryhan"
         password: "1111"
+
+        urlTemplate: "host=%s port=%s dbname=%s user=%s password=%s sslmode=disable"
         driver: "postgres"
 
 broker:

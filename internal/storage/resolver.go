@@ -1,7 +1,9 @@
 package storage
 
-import "github.com/Egor123qwe/logs-storage/internal/storage/repo/log"
+import (
+	"github.com/Egor123qwe/logs-storage/internal/storage/repo"
+)
 
-func (s storage) Log() log.Log {
+func (s storage) Log() repo.Log {
 	return s.psql.Log()
 }

@@ -5,10 +5,11 @@ import (
 	"sync"
 
 	"github.com/op/go-logging"
+	"golang.org/x/sync/errgroup"
+
 	"github.com/Egor123qwe/logs-storage/internal/broker/kafka"
 	"github.com/Egor123qwe/logs-storage/internal/server/launcher"
 	"github.com/Egor123qwe/logs-storage/pkg/msghandler"
-	"golang.org/x/sync/errgroup"
 )
 
 var log = logging.MustGetLogger("kafka")
@@ -16,7 +17,8 @@ var log = logging.MustGetLogger("kafka")
 type server struct {
 	handler msghandler.MsgResolver
 	broker  kafka.Service
-	config  config
+
+	config config
 }
 
 func New(broker kafka.Service, handler msghandler.MsgResolver) launcher.Server {
@@ -70,8 +72,7 @@ func (s server) serve(ctx context.Context, consumer consumer) error {
 		}
 
 		go func() {
-			err := s.handler.ServeMSG(ctx, m)
-			if err != nil {
+			if err := s.handler.ServeMSG(ctx, m); err != nil {
 				log.Errorf("failed to handle message: %v", err)
 
 				return

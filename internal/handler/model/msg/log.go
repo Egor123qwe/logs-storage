@@ -4,13 +4,13 @@ import (
 	"time"
 )
 
-type Log struct {
-	ID      uint64 `json:"id,omitempty"`
-	TraceID string `json:"trace_id"`
+type LogReq struct {
+	ID       int64  `json:"id,omitempty"`
+	TraceID  string `json:"trace_id"`
+	ModuleID int64  `json:"module_id"`
 
-	Time   time.Time `json:"time"`
-	Module string    `json:"module"`
-	Level  string    `json:"level"`
+	Time  time.Time `json:"time"`
+	Level string    `json:"level"`
 
 	Message string `json:"message"`
 }

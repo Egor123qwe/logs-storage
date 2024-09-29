@@ -8,6 +8,10 @@ import (
 )
 
 func (s service) InitModule(ctx context.Context, module string) (int64, error) {
+	if module == "" {
+		return 0, model.EmptyModuleName
+	}
+
 	return s.storage.Log().InitModule(ctx, module)
 }
 
